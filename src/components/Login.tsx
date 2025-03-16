@@ -69,6 +69,7 @@ export function Login({ api }: { api: string }) {
 									<Input
 										className="focus:border-2 focus:border-gray-600"
 										{...field}
+										placeholder="testadmin or testguide"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -87,6 +88,7 @@ export function Login({ api }: { api: string }) {
 										type="password"
 										className="focus:border-2 focus:border-gray-600"
 										{...field}
+										placeholder="testadmin or testguide"
 									/>
 								</FormControl>
 								<FormMessage />
