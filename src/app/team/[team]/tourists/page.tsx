@@ -1,0 +1,82 @@
+import { cookies } from 'next/headers';
+import {
+	// ITeam,
+	INationalities,
+	IGenders,
+	ITourists,
+	ICurrencies,
+	IPaymentMethods,
+} from '@/lib/types';
+import Header from '@/components/partials/Header';
+import TouristAccordion from '@/components/accordions/TouristAccordion';
+import { AddTourist } from '@/components/add/AddTourist';
+import { notFound } from 'next/navigation';
+
+type Team = {
+	team: string;
+	id: number;
+};
+
+type TeamTouristResponse = {
+	team: Team;
+	tourists: ITourists[];
+	nationalities?: INationalities[];
+	genders?: IGenders[];
+	currencies?: ICurrencies[];
+	paymentMethods?: IPaymentMethods[];
+};
+
+export default async function Page({ params }: { params: { team: string } }) {
+	const team = (await params).team;
+	const api = process.env.API as string;
+	const cookieStore = await cookies();
+	const token = cookieStore.get('x-auth-token')?.value as string;
+
+	const res = await fetch(`${api}/teams/${team}/tourists`, {
+		method: 'GET',
+		headers: {
+			'x-auth-token': `${token}`,
+		},
+	});
+
+	if (!res.ok) {
+		notFound();
+	}
+
+	const data = (await res.json()) as TeamTouristResponse;
+
+	return (
+		<div className="flex flex-col min-h-screen">
+			<div className="w-full">
+				<Header />
+			</div>
+
+			<span className="text-center text-3xl mb-12">
+				Tourists for {data.team.team}
+			</span>
+
+			<div className="flex flex-col items-center justify-center space-y-16">
+				<TouristAccordion
+					data={data.tourists}
+					api={api}
+					token={token}
+					nationalities={data.nationalities || []}
+					genders={data.genders || []}
+					currencies={data.currencies || []}
+					paymentMethods={data.paymentMethods || []}
+				/>
+
+				<AddTourist
+					api={api}
+					token={token}
+					teamName={data.team.team}
+					teamId={data.team.id}
+					nationalities={data.nationalities || []}
+					genders={data.genders || []}
+					currencies={data.currencies || []}
+					paymentMethods={data.paymentMethods || []}
+				/>
+			</div>
+		</div>
+	);
+}
