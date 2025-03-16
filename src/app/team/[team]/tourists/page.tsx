@@ -26,7 +26,11 @@ type TeamTouristResponse = {
 	paymentMethods?: IPaymentMethods[];
 };
 
-export default async function Page({ params }: { params: { team: string } }) {
+type PageProps = {
+	params: Promise<{ team: string }>;
+};
+
+export default async function Page({ params }: PageProps) {
 	const team = (await params).team;
 	const api = process.env.API as string;
 	const cookieStore = await cookies();

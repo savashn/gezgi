@@ -16,7 +16,7 @@ type Data = {
 	totalCount: number;
 };
 
-export default async function Page(props: { searchParams: SearchParams }) {
+export default async function Page(props: { searchParams: Promise<SearchParams> }) {
 	const searchParams = await props.searchParams;
 	const api = process.env.API as string;
 	const cookieStore = await cookies();

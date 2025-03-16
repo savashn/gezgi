@@ -4,7 +4,11 @@ import Other from '@/components/Other';
 import { IItem } from '@/lib/types';
 import { notFound } from 'next/navigation';
 
-export default async function Page({ params }: { params: { slug: string } }) {
+type PageProps = {
+	params: Promise<{ slug: string }>;
+};
+
+export default async function Page({ params }: PageProps) {
 	const slug = (await params).slug;
 	const api = process.env.API as string;
 	const cookieStore = await cookies();
