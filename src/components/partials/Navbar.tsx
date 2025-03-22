@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { MenuButton } from '@/components/partials/MenuButton';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
+import LogoutButton from './LogoutButton';
 
 type NavItemType = {
 	href: string;
@@ -38,14 +38,6 @@ export default function Navbar() {
 		useState<boolean>(false);
 	const [isMobileContractualOpen, setIsMobileContractualOpen] =
 		useState<boolean>(false);
-
-	const router = useRouter();
-
-	const handleLogout = () => {
-		document.cookie =
-			'x-auth-token=; Max-Age=0; path=/; secure; SameSite=Strict';
-		router.push('/');
-	};
 
 	return (
 		<nav className="p-4 flex justify-end items-right w-full text-white">
@@ -136,7 +128,7 @@ export default function Navbar() {
 				</div>
 
 				{/* LOGOUT */}
-				<button onClick={handleLogout}>Logout</button>
+				<LogoutButton />
 			</div>
 
 			{/* Desktop Menu */}
@@ -198,7 +190,7 @@ export default function Navbar() {
 				</div>
 
 				{/* Logout */}
-				<button onClick={handleLogout}>Logout</button>
+				<LogoutButton />
 			</div>
 		</nav>
 	);

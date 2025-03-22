@@ -20,7 +20,11 @@ export default async function Page({ params }: PageProps) {
 		const decodedToken = jwtDecode<{ isAdmin: boolean; id: number }>(token);
 		admin = decodedToken.isAdmin;
 	} else {
-		return <div>youre not allowed to be here</div>;
+		notFound();
+	}
+
+	if (admin === false) {
+		notFound();
 	}
 
 	const res = await fetch(`${api}/admin/${slug}`, {
@@ -39,13 +43,7 @@ export default async function Page({ params }: PageProps) {
 	return (
 		<div>
 			<div className="flex flex-col items-center justify-center w-full space-y-12">
-				<Other
-					api={api}
-					token={token}
-					slug={slug}
-					isAdmin={admin}
-					items={data}
-				/>
+				<Other api={api} token={token} slug={slug} items={data} />
 			</div>
 		</div>
 	);

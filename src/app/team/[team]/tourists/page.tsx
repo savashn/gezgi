@@ -1,16 +1,18 @@
 import { cookies } from 'next/headers';
 import {
-	// ITeam,
 	INationalities,
 	IGenders,
 	ITourists,
 	ICurrencies,
 	IPaymentMethods,
+	DecodedToken,
 } from '@/lib/types';
 import Header from '@/components/partials/Header';
 import TouristAccordion from '@/components/accordions/TouristAccordion';
 import { AddTourist } from '@/components/add/AddTourist';
 import { notFound } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
+import Link from 'next/link';
 
 type Team = {
 	team: string;
@@ -36,6 +38,13 @@ export default async function Page({ params }: PageProps) {
 	const cookieStore = await cookies();
 	const token = cookieStore.get('x-auth-token')?.value as string;
 
+	let admin: boolean = false;
+
+	if (token) {
+		const decodedToken = jwtDecode<DecodedToken>(token);
+		admin = decodedToken.isAdmin;
+	}
+
 	const res = await fetch(`${api}/teams/${team}/tourists`, {
 		method: 'GET',
 		headers: {
@@ -56,7 +65,10 @@ export default async function Page({ params }: PageProps) {
 			</div>
 
 			<span className="text-center text-3xl mb-12">
-				Tourists for {data.team.team}
+				Tourists for{' '}
+				<Link href={`/team/${data.team.team}`} className="underline">
+					{data.team.team}
+				</Link>
 			</span>
 
 			<div className="flex flex-col items-center justify-center space-y-16">
@@ -68,18 +80,21 @@ export default async function Page({ params }: PageProps) {
 					genders={data.genders || []}
 					currencies={data.currencies || []}
 					paymentMethods={data.paymentMethods || []}
+					admin={admin}
 				/>
 
-				<AddTourist
-					api={api}
-					token={token}
-					teamName={data.team.team}
-					teamId={data.team.id}
-					nationalities={data.nationalities || []}
-					genders={data.genders || []}
-					currencies={data.currencies || []}
-					paymentMethods={data.paymentMethods || []}
-				/>
+				{admin && (
+					<AddTourist
+						api={api}
+						token={token}
+						teamName={data.team.team}
+						teamId={data.team.id}
+						nationalities={data.nationalities || []}
+						genders={data.genders || []}
+						currencies={data.currencies || []}
+						paymentMethods={data.paymentMethods || []}
+					/>
+				)}
 			</div>
 		</div>
 	);

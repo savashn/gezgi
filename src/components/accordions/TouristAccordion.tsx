@@ -23,6 +23,7 @@ type TouristAccordionProps = {
 	data: ITourists[];
 	api: string;
 	token: string;
+	admin: boolean;
 	nationalities?: INationalities[];
 	genders?: IGenders[];
 	currencies?: ICurrencies[];
@@ -35,6 +36,7 @@ export default function TouristAccordion({
 	data,
 	api,
 	token,
+	admin,
 	nationalities,
 	genders,
 	currencies,
@@ -449,31 +451,33 @@ export default function TouristAccordion({
 									)}
 								</div>
 
-								<div className="col-span-2">
-									{editingId === v.id ? (
-										<div className="flex gap-2">
+								{admin && (
+									<div className="col-span-2">
+										{editingId === v.id ? (
+											<div className="flex gap-2">
+												<button
+													onClick={() => setEditingId(null)}
+													className="bg-gray-700 text-white rounded-md px-3 py-1 mt-2"
+												>
+													Cancel
+												</button>
+												<button
+													onClick={handleSubmit(handleSave)}
+													className="bg-green-700 text-white rounded-md px-3 py-1 mt-2"
+												>
+													Save
+												</button>
+											</div>
+										) : (
 											<button
-												onClick={() => setEditingId(null)}
-												className="bg-gray-700 text-white rounded-md px-3 py-1 mt-2"
+												onClick={() => handleEdit(v)}
+												className="bg-blue-700 text-white rounded-md px-3 py-1 mt-2"
 											>
-												Cancel
+												Edit Tourist
 											</button>
-											<button
-												onClick={handleSubmit(handleSave)}
-												className="bg-green-700 text-white rounded-md px-3 py-1 mt-2"
-											>
-												Save
-											</button>
-										</div>
-									) : (
-										<button
-											onClick={() => handleEdit(v)}
-											className="bg-blue-700 text-white rounded-md px-3 py-1 mt-2"
-										>
-											Edit Tourist
-										</button>
-									)}
-								</div>
+										)}
+									</div>
+								)}
 							</div>
 						</AccordionContent>
 					</AccordionItem>

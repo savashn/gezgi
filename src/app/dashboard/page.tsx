@@ -10,7 +10,9 @@ type SearchParams = {
 	page: string;
 };
 
-export default async function Page(props: { searchParams: Promise<SearchParams> }) {
+export default async function Page(props: {
+	searchParams: Promise<SearchParams>;
+}) {
 	const searchParams = await props.searchParams;
 	const api = process.env.API as string;
 	const cookieStore = await cookies();
@@ -54,7 +56,7 @@ export default async function Page(props: { searchParams: Promise<SearchParams> 
 
 			<span className="my-6 text-2xl">{data.totalCount.count} data found:</span>
 
-			<TeamAccordion data={admin ? (data.teams as ITeams[]) : data} />
+			<TeamAccordion data={data.teams as ITeams[]} />
 			<Pages
 				total={data.totalCount.count as number}
 				page={searchParams.page || '1'}

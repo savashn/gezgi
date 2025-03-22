@@ -678,13 +678,6 @@ function Team({
 					<div className="flex flex-col sm:flex-row gap-2 m-auto justify-center items-center mb-12">
 						{isAdmin && isAdmin === true && (
 							<>
-								<Link
-									href={`/team/${slug}/tourists`}
-									className="bg-blue-800 hover:bg-blue-700 text-white rounded-md px-4 py-2 text-sm"
-								>
-									Show tourists list
-								</Link>
-
 								<button
 									onClick={() => {
 										setShowActivities(false);
@@ -696,6 +689,13 @@ function Team({
 								</button>
 							</>
 						)}
+
+						<Link
+							href={`/team/${slug}/tourists`}
+							className="bg-blue-800 hover:bg-blue-700 text-white rounded-md px-4 py-2 text-sm"
+						>
+							Show tourists list
+						</Link>
 
 						<button
 							onClick={() => {
