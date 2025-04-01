@@ -171,6 +171,7 @@ export interface ITourists {
 	passportNo: string;
 	email: string;
 	phone: string;
+	address: string;
 	intimate: string;
 	intimacy: string;
 	intimatePhone: string;

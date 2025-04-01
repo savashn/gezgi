@@ -42,6 +42,8 @@ export default function GuideAccordion({
 		resolver: zodResolver(guideSchema),
 	});
 
+	console.log('Form errors:', errors);
+
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 		field: keyof IGuides,
@@ -78,6 +80,7 @@ export default function GuideAccordion({
 	};
 
 	const handleSave = async (data: GuideFormData) => {
+		console.log(data);
 		if (!formData) return;
 
 		try {
@@ -103,7 +106,7 @@ export default function GuideAccordion({
 				return;
 			}
 
-			const msg = response.text();
+			const msg = await response.text();
 
 			toast.success('Success!', {
 				description: msg,
@@ -111,6 +114,7 @@ export default function GuideAccordion({
 
 			setEditingId(null);
 			setFormData(null);
+			reset();
 			window.location.reload();
 		} catch (error) {
 			console.error('An unknown error occurred:', error);

@@ -61,6 +61,8 @@ export function AddGuide({
 			body: JSON.stringify(data),
 		});
 
+		console.log(data);
+
 		if (!res.ok) {
 			const errText = await res.json();
 			toast.error(errText.message || 'An unknown error occurred.');

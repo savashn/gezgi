@@ -54,6 +54,8 @@ export default function TouristAccordion({
 		resolver: zodResolver(touristSchema),
 	});
 
+	console.log('Form errors:', errors);
+
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 		field: keyof ITourists,
@@ -74,6 +76,7 @@ export default function TouristAccordion({
 	};
 
 	const handleEdit = (tourist: ITourists) => {
+		console.log('Edit mode activated for:', tourist.id);
 		setEditingId(tourist.id);
 		setFormData(tourist);
 		reset({
@@ -119,7 +122,7 @@ export default function TouristAccordion({
 				return;
 			}
 
-			const msg = response.text();
+			const msg = await response.text();
 
 			toast.success('Success!', {
 				description: msg,
@@ -127,6 +130,7 @@ export default function TouristAccordion({
 
 			setEditingId(null);
 			setFormData(null);
+			reset();
 			window.location.reload();
 		} catch (error) {
 			console.error('An unknown error occurred:', error);
@@ -202,6 +206,25 @@ export default function TouristAccordion({
 									{errors.phone && (
 										<p className="bg-red-600 text-white text-xs p-1 rounded-md">
 											{errors.phone.message}
+										</p>
+									)}
+								</div>
+
+								<div className="font-semibold">Address:</div>
+								<div>
+									{editingId === v.id ? (
+										<input
+											type="text"
+											{...register('address')}
+											defaultValue={formData?.address || ''}
+											className="border rounded px-2 py-1 w-full bg-gray-700 text-white"
+										/>
+									) : (
+										v.address
+									)}
+									{errors.address && (
+										<p className="bg-red-600 text-white text-xs p-1 rounded-md">
+											{errors.address.message}
 										</p>
 									)}
 								</div>

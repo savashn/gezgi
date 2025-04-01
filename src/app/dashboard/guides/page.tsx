@@ -16,7 +16,7 @@ export default async function Page() {
 	const token = cookieStore.get('x-auth-token')?.value as string;
 
 	if (!token) {
-		return <div>youre not allowed to be here</div>;
+		notFound();
 	}
 
 	const res = await fetch(`${api}/admin/guides`, {
@@ -31,8 +31,6 @@ export default async function Page() {
 	}
 
 	const data = (await res.json()) as GuideResponse;
-
-	console.log(data);
 
 	return (
 		<div>

@@ -712,17 +712,25 @@ function Team({
 						className={`md:w-[40rem] flex justify-center items-center transition-all duration-300 ease-in-out overflow-hidden ${showActivities ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
 					>
 						{showActivities && (
-							<ActivityAccordion
-								api={api}
-								token={token}
-								isAdmin={isAdmin}
-								slug={slug}
-								activities={activities || []}
-								airports={airports}
-								restaurants={restaurants}
-								vehicles={vehicles}
-								housings={housings}
-							/>
+							<>
+								{activities?.length === 0 ? (
+									<div className="flex justify-center items-center text-2xl">
+										No activities found
+									</div>
+								) : (
+									<ActivityAccordion
+										api={api}
+										token={token}
+										isAdmin={isAdmin}
+										slug={slug}
+										activities={activities || []}
+										airports={airports}
+										restaurants={restaurants}
+										vehicles={vehicles}
+										housings={housings}
+									/>
+								)}
+							</>
 						)}
 					</div>
 

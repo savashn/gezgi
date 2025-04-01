@@ -42,17 +42,31 @@ export const guideSchema = z
 			message: 'Intimacy must be at least 2 characters.',
 		}),
 		isAdmin: z.boolean(),
-		password: z.string().min(8, {
-			message: 'Password must be at least 8 characters',
-		}),
-		rePassword: z.string().min(8, {
-			message: 'Password must be at least 8 characters',
-		}),
+		password: z
+			.string()
+			.optional()
+			.refine((val) => !val || val.length >= 8, {
+				message: 'Password must be at least 8 characters',
+			}),
+		rePassword: z
+			.string()
+			.optional()
+			.refine((val) => !val || val.length >= 8, {
+				message: 'Password must be at least 8 characters',
+			}),
 	})
-	.refine((data) => data.password === data.rePassword, {
-		message: 'Passwords do not match',
-		path: ['rePassword'],
-	});
+	.refine(
+		(data) => {
+			if (!data.password && !data.rePassword) {
+				return true;
+			}
+			return data.password === data.rePassword;
+		},
+		{
+			message: 'Passwords do not match',
+			path: ['rePassword'],
+		},
+	);
 
 export const teamSchema = z.object({
 	team: z.string().min(2, {
@@ -109,7 +123,7 @@ export const touristSchema = z.object({
 	currencyId: z.number(),
 	paymentMethodId: z.number(),
 	isPayed: z.boolean(),
-	teamId: z.number().int(),
+	teamId: z.number().int()
 });
 
 export const loginSchema = z.object({
@@ -185,37 +199,18 @@ export const restaurantSchema = z.object({
 	}),
 });
 
-export const activitySchema = z
-	.object({
-		activity: z.string().min(2, {
-			message: 'Activity must be at least 2 characters.',
-		}),
-		activityTime: z.string().min(10, {
-			message: 'Activity time must be at least 10 characters.',
-		}),
-		teamId: z.number().int(),
-		hotelId: z.number().int().optional(),
-		restaurantId: z.number().int().optional(),
-		companyOfVehicleId: z.number().int().optional(),
-		plateOfVehicle: z.string(),
-		contactOfDriver: z.string(),
-		airportId: z.number().int().optional(),
-	})
-	.refine(
-		(data) => {
-			const selectedFields = [
-				data.hotelId,
-				data.airportId,
-				data.companyOfVehicleId,
-				data.restaurantId,
-			];
-			const filledCount = selectedFields.filter((v) => v !== undefined).length;
-
-			return filledCount === 1;
-		},
-		{
-			message:
-				'Only one of hotel, airport, company of vehicle, or restaurant must be provided.',
-			path: ['hotelId', 'airportId', 'companyOfVehicleId', 'restaurantId'],
-		},
-	);
+export const activitySchema = z.object({
+	activity: z.string().min(2, {
+		message: 'Activity must be at least 2 characters.',
+	}),
+	activityTime: z.string().min(10, {
+		message: 'Activity time must be at least 10 characters.',
+	}),
+	teamId: z.number().int().nullable().optional(),
+	hotelId: z.number().int().nullable().optional(),
+	restaurantId: z.number().int().nullable().optional(),
+	companyOfVehicleId: z.number().int().nullable().optional(),
+	plateOfVehicle: z.string().optional(),
+	contactOfDriver: z.string().optional(),
+	airportId: z.number().int().nullable().optional(),
+});

@@ -68,7 +68,7 @@ export function AddActivity({
 			body: JSON.stringify(data),
 		});
 
-		console.log(res);
+		console.log(data);
 
 		if (!res.ok) {
 			const errText = await res.json();

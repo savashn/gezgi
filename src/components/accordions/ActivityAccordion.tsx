@@ -57,6 +57,8 @@ export default function ActivityAccordion({
 		resolver: zodResolver(activitySchema),
 	});
 
+	console.log('Form errors:', errors);
+
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 		field: keyof IActivities,
@@ -77,6 +79,7 @@ export default function ActivityAccordion({
 	};
 
 	const handleEdit = (activity: IActivities) => {
+		console.log('Edit mode activated for:', activity.id);
 		setEditingId(activity.id);
 		setFormData(activity);
 		reset({
@@ -92,6 +95,7 @@ export default function ActivityAccordion({
 	};
 
 	const handleSave = async (data: ActivityFormData) => {
+		console.log('Saving data:', data);
 		if (!formData) return;
 
 		try {
@@ -116,7 +120,7 @@ export default function ActivityAccordion({
 				return;
 			}
 
-			const msg = response.text();
+			const msg = await response.text();
 
 			toast.success('Success!', {
 				description: msg,
@@ -124,6 +128,7 @@ export default function ActivityAccordion({
 
 			setEditingId(null);
 			setFormData(null);
+			reset();
 			window.location.reload();
 		} catch (error) {
 			console.error('An unknown error occurred:', error);
@@ -198,7 +203,7 @@ export default function ActivityAccordion({
 								<div>
 									{editingId === v.id ? (
 										<input
-											type="date"
+											type="datetime"
 											{...register('activityTime')}
 											defaultValue={formData?.activityTime || ''}
 											className="border rounded px-2 py-1 w-full bg-gray-700 text-white"
